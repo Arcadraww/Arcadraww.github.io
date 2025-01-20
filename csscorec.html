@@ -17,18 +17,16 @@
                 currentIndex++;
                 // Si on arrive au bout de la séquence
                 if (currentIndex === secretSequence.length) {
-                    // Injecte la vidéo DOOM dans la page
-                    const iframe = document.createElement('iframe');
-                    iframe.width = "560";
-                    iframe.height = "315";
-                    // Remplace l'URL ci-dessous par la vidéo exacte souhaitée si nécessaire
-                    iframe.src = "https://www.youtube.com/embed/2K87BIfHCnI?autoplay=1";
-                    iframe.title = "DOOM - The Only Thing They Fear Is You";
-                    iframe.frameBorder = "0";
-                    iframe.allow =
-                      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                    iframe.allowFullscreen = true;
-                    document.body.appendChild(iframe);
+                    // Injecte l’image vianney.jpg dans la page
+                    const img = document.createElement('img');
+                    // Ajustez le chemin d’accès si nécessaire (par ex. './images/vianney.jpg')
+                    img.src = "images/vianney.jpg";
+                    // Optionnel : dimensionner ou styliser l’image
+                    img.style.maxWidth = "400px";
+                    img.style.display = "block";
+                    img.style.margin = "20px auto";  // pour la centrer, si souhaité
+
+                    document.body.appendChild(img);
 
                     // Réinitialise l’index pour un nouvel essai éventuel
                     currentIndex = 0;
