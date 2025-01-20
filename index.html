@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - Corrections d'exercices</title>
     <link rel="stylesheet" href="./style/style.css">
+    <script>
+        // Script invisible pour un easter egg
+        (function() {
+            // Séquence secrète (haut, haut, bas, bas, gauche, droite, gauche, droite, B, A)
+            const secretSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+            let currentIndex = 0;
+
+            document.addEventListener('keydown', function(e) {
+                if (e.keyCode === secretSequence[currentIndex]) {
+                    currentIndex++;
+                    if (currentIndex === secretSequence.length) {
+                        // Injecte la vidéo dans la page quand la séquence est complète
+                        const iframe = document.createElement('iframe');
+                        iframe.width = "560";
+                        iframe.height = "315";
+                        iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
+                        iframe.title = "Easter Egg Video";
+                        iframe.frameBorder = "0";
+                        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                        iframe.allowFullscreen = true;
+                        document.body.appendChild(iframe);
+
+                        // Réinitialise l’index pour pouvoir ré-exécuter si nécessaire
+                        currentIndex = 0;
+                    }
+                } else {
+                    // Si une touche ne correspond pas, on repart à zéro
+                    currentIndex = 0;
+                }
+            });
+        })();
+    </script>
 </head>
 <body>
     <nav class="sidebar">
@@ -52,6 +84,5 @@
             <p><a href="https://www.fil.univ-lille.fr/portail/index.php?dipl=L1_MI&sem=L1MIS2&ue=TW1&label=Semainier">Lien du site pour accéder aux travaux dirigés.</a></p>
         </div>
     </footer>
-
 </body>
 </html>
