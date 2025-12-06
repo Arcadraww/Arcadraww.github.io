@@ -1,88 +1,1599 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Corrections d'exercices</title>
-    <link rel="stylesheet" href="./style/style.css">
-    <script>
-        // Script invisible pour un easter egg
-        (function() {
-            // Séquence secrète (haut, haut, bas, bas, gauche, droite, gauche, droite, B, A)
-            const secretSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-            let currentIndex = 0;
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>METAHUMAN FILES : Analyse Biophysique Complète</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;800&family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0"
+        rel="stylesheet">
+    <!-- Font for Flash Comic Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto+Condensed:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
-            document.addEventListener('keydown', function(e) {
-                if (e.keyCode === secretSequence[currentIndex]) {
-                    currentIndex++;
-                    if (currentIndex === secretSequence.length) {
-                        // Injecte la vidéo dans la page quand la séquence est complète
-                        const iframe = document.createElement('iframe');
-                        iframe.width = "560";
-                        iframe.height = "315";
-                        iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
-                        iframe.title = "Easter Egg Video";
-                        iframe.frameBorder = "0";
-                        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                        iframe.allowFullscreen = true;
-                        document.body.appendChild(iframe);
+    <style>
+        /* --- Configuration Globale --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #020617;
+            color: #e2e8f0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
 
-                        // Réinitialise l’index pour pouvoir ré-exécuter si nécessaire
-                        currentIndex = 0;
-                    }
-                } else {
-                    // Si une touche ne correspond pas, on repart à zéro
-                    currentIndex = 0;
-                }
-            });
-        })();
-    </script>
+        h1,
+        h2,
+        h3,
+        h4,
+        .tech-font {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Flash Comic Font */
+        .comic-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Layout --- */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .header-bar {
+            height: 3rem;
+            flex-shrink: 0;
+        }
+
+        .footer-bar {
+            height: 3rem;
+            flex-shrink: 0;
+        }
+
+        .main-stage {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            padding: 0.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* --- Effets Visuels --- */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+        }
+
+        .cyan-glow {
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+        }
+
+        .red-glow {
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+
+        .blue-glow {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+        }
+
+        .text-shadow-comic {
+            text-shadow: 4px 4px 0px #000;
+        }
+
+        .speed-bar-fill {
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 0;
+        }
+
+        .web-bar-fill {
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            width: 0;
+        }
+
+        /* Animation de fond (Particules) */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: var(--max-opacity);
+            }
+
+            100% {
+                transform: translateY(-110vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        /* Lightning Effect for Flash Slide */
+        @keyframes lightning-flash {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            5% {
+                opacity: 0.8;
+            }
+
+            10% {
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 0.8;
+            }
+
+            20% {
+                opacity: 0;
+            }
+        }
+
+        .animate-lightning {
+            animation: lightning-flash 3s infinite;
+        }
+
+        .slide-enter-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Text Scaling */
+        .text-adaptive-title {
+            font-size: clamp(2rem, 4vw, 4.5rem);
+            line-height: 0.9;
+        }
+
+        .text-adaptive-body {
+            font-size: clamp(0.75rem, 0.9vw, 1rem);
+            line-height: 1.5;
+[CONTENU COMPLET DES SLIDES SPIDER-MAN DE SpiderMan_Expose_Interactif.html ICI]
+
+        img {
+            -webkit-user-drag: none;
+        }
+
+        /* Menu de Sélection */
+        .hero-card {
+            position: relative;
+            z-index: 0;
+            overflow: hidden;
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.28s ease, filter 0.28s ease, background 0.28s ease;
+            filter: grayscale(65%) saturate(0.7);
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(15,23,42,0.82));
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.32);
+        }
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: -12%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.09), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        .hero-card:hover {
+              filter: grayscale(0%) saturate(1.25) drop-shadow(0 0 16px var(--hero-color));
+              transform: translateY(-14px) scale(1.13);
+              border-color: var(--hero-color);
+              background: linear-gradient(140deg, var(--hero-color) 0%, rgba(15,23,42,0.92) 80%);
+              box-shadow: 0 18px 48px 0 rgba(0,0,0,0.55), 0 0 0 5px var(--hero-color), 0 0 32px 8px var(--hero-glow);
+              outline: 2.5px solid var(--hero-color);
+              outline-offset: 2px;
+        }
+        .hero-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Correction hover texte menu principal */
+        .hero-card:hover h3 {
+            color: var(--hero-color);
+        }
+
+        /* --- Continuous Regeneration Animation Styles --- */
+        .regen-stage {
+            position: relative;
+            width: 320px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: visible;
+            border: 2px solid rgba(147, 51, 234, 0.5);
+            display: block;
+            margin: 0 auto;
+        }
+        /* The stump (always there) */
+        .stump {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(90deg, #be185d 0%, #f472b6 100%);
+            border-radius: 30px 0 0 30px;
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
+        }
+        /* The regrowing part */
+        .new-limb {
+            position: absolute;
+            left: 78px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 50px;
+            background: linear-gradient(90deg, #f472b6 0%, #fbcfe8 100%);
+            width: 180px;
+            border-radius: 0 25px 25px 0;
+            display: block;
+            animation: regrowLoop 6s infinite ease-in-out;
+            transform-origin: left center;
+            box-shadow: 0 0 15px rgba(251, 207, 232, 0.4);
+        }
+        /* Fingers */
+        .fingers-container {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            opacity: 0;
+            animation: fingersAppear 6s infinite ease-in-out;
+        }
+        .finger-digit {
+            width: 20px;
+            height: 6px;
+            background: #fbcfe8;
+            border-radius: 3px;
+            box-shadow: 0 0 5px rgba(251, 207, 232, 0.6);
+        }
+        /* The Blastema (glowing tip) */
+        .blastema-glow {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(250, 204, 21, 1) 0%, rgba(250, 204, 21, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            animation: blastemaPulse 6s infinite;
+            filter: blur(4px);
+        }
+        /* Amputation Line (visual cut) */
+        .cut-line {
+            position: absolute;
+            left: 78px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80px;
+            width: 3px;
+            background: red;
+            opacity: 0;
+            animation: cutEffect 6s infinite;
+            box-shadow: 0 0 15px red;
+            z-index: 20;
+        }
+
+        @keyframes regrowLoop {
+            0% { width: 180px; opacity: 1; } /* Fully grown */
+            5% { width: 180px; opacity: 1; }
+            10% { width: 0px; opacity: 0; } /* CUT! (Amputation) */
+            20% { width: 20px; opacity: 0.5; } /* Blastema forms */
+            40% { width: 80px; opacity: 0.8; } /* Growing */
+            100% { width: 180px; opacity: 1; } /* Regrown */
+        }
+        @keyframes fingersAppear {
+            0% { opacity: 1; }
+            9% { opacity: 1; }
+            10% { opacity: 0; } /* Disappear on cut */
+            60% { opacity: 0; } /* Still growing */
+            80% { opacity: 1; } /* Fingers reform */
+            100% { opacity: 1; }
+        }
+        @keyframes cutEffect {
+            0%, 8% { opacity: 0; }
+            9% { opacity: 1; transform: translateY(-50%) scaleY(1.5); } /* Flash red */
+            11% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        @keyframes blastemaPulse {
+            0%, 15% { opacity: 0; transform: translateY(-50%) scale(0.5); }
+            20% { opacity: 1; transform: translateY(-50%) scale(1.8); } /* Blastema peak */
+            60% { opacity: 0.7; transform: translateY(-50%) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-50%) scale(0.5); }
+        }
+    </style>
 </head>
+
 <body>
-    <nav class="sidebar">
-        <a href="./index.html">Accueil</a>
-        <a href="./htmlcorec.html">Exercices HTML</a>
-        <a href="./csscorec.html">Exercices CSS</a>
-        <a href="./jscorec.html">Exercices JavaScript</a>
-    </nav>
-    <div class="content" style="display: flex;">
-        <div class="left-section" style="flex: 1; padding: 50px; text-align: left;">
-            <h1>Accédez aux comptes-rendus <strong>MAINTENANT !</strong></h1>
-            <p>
-                Sur ce site, vous trouverez les corrections des exercices pour les trois types suivants :
-                <span class="highlight">HTML</span>, <span class="highlight">CSS</span>, et <span class="highlight">JavaScript</span>.
-                Utilisez la barre latérale en haut pour naviguer entre les sections.
-            </p>
-            <p>
-                Sélectionnez une catégorie pour commencer à explorer les solutions aux exercices et améliorer vos compétences !
-            </p>
+    <div class="fixed inset-0 z-0 pointer-events-none bg-slate-950">
+        <div id="bg-gradient"
+            class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-950 to-black transition-all duration-1000">
         </div>
-
-        <div class="right-section" style="flex: 1; padding: 20px; display: flex; justify-content: center; align-items: center; border-left: 1px solid #ddd;">
-            <img src="images/geekette.svg" alt="Geek" style="max-width: 100%; max-height: 100%;">
-        </div>
-    </div>
-    <div class="bottom-section">
-        <div class="left-image">
-            <img src="images/geek.svg" alt="Autre image">
-        </div>
-
-        <div class="right-text" >
-            <h1>Pourquoi ce site ?</h1>
-            <p>
-                Au premier abord, on va pas se mentir on pourrait croire à une géante anti-sèche, mais l'idée n'est pas la. L'objectif est non seulement de proposer
-                un compte rendu des travaux dirigés mais aussi de mettre en pratique l'ensemble des connaissances acquises ce semestre.
-            </p>
-            <p>
-                Ce site contribue donc au travail autonome à fournir, ainsi qu'une démonstration technique de ce qu'il est vraiment possible de proposer quand on veut.
-            </p>
-        </div>
+        <div id="particles-container" class="absolute inset-0"></div>
     </div>
 
-    <footer class="bottom-bar">
-        <div class="bottom-content">
-            <p><a href="https://www.fil.univ-lille.fr/portail/index.php?dipl=L1_MI&sem=L1MIS2&ue=TW1&label=Semainier">Lien du site pour accéder aux travaux dirigés.</a></p>
-        </div>
-    </footer>
+    <div class="app-container relative z-10">
+
+        <header class="header-bar glass-panel border-b border-white/10 flex items-center justify-between px-6 z-50">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="goToSlide(0)">
+                <div class="h-8 w-8 bg-white/10 rounded flex items-center justify-center border border-white/20">
+                    <span class="material-symbols-outlined text-white text-sm">hub</span>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-lg font-bold tracking-widest text-white leading-none">METAHUMAN</h1>
+                    <p class="text-[9px] text-slate-400 font-mono tracking-[0.2em] uppercase leading-none mt-0.5">FILES
+                        DATABASE</p>
+                </div>
+            </div>
+            <div class="flex gap-2 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+                <span id="current-hero-label">Selection</span>
+                <span>//</span>
+                <span id="slide-counter">00</span>
+            </div>
+        </header>
+
+        <main class="main-stage">
+            <div class="slide-track" id="slider-track">
+
+                <!-- SLIDE 0: HUB -->
+                <div class="slide">
+                    <div class="flex flex-col items-center justify-center h-full gap-8">
+                        <h2 class="text-4xl font-black text-white tracking-tight mb-4">SÉLECTIONNEZ UN SUJET</h2>
+
+                        <div class="grid grid-cols-4 gap-6 w-full max-w-6xl h-[60%]">
+                            <button onclick="startHero('aquaman')" class="hero-card glass-panel rounded-2xl border-2 border-white/10 p-6 flex flex-col items-center justify-center gap-4 relative overflow-hidden group" style="--hero-color: #06b6d4; --hero-glow: rgba(6, 182, 212, 0.4);">
+                                <span class="material-symbols-outlined text-6xl text-cyan-500 mb-2">water_drop</span>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-cyan-400">AQUAMAN</h3>
+                                <p class="text-xs text-slate-400 font-mono">BIOPHYSIQUE DES ABYSSES</p>
+                            </button>
+
+                            <button onclick="startHero('spiderman')" class="hero-card glass-panel rounded-2xl border-2 border-white/10 p-6 flex flex-col items-center justify-center gap-4 relative overflow-hidden group" style="--hero-color: #ef4444; --hero-glow: rgba(239, 68, 68, 0.4);">
+                                <span class="material-symbols-outlined text-6xl text-red-500 mb-2">bug_report</span>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-red-500">SPIDER-MAN</h3>
+                                <p class="text-xs text-slate-400 font-mono">MATÉRIAUX & ADHÉSION</p>
+                            </button>
+
+                            <button onclick="startHero('flash')" class="hero-card glass-panel rounded-2xl border-2 border-white/10 p-6 flex flex-col items-center justify-center gap-4 relative overflow-hidden group" style="--hero-color: #eab308; --hero-glow: rgba(234, 179, 8, 0.4);">
+                                <span class="material-symbols-outlined text-6xl text-yellow-500 mb-2">bolt</span>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-yellow-400">THE FLASH</h3>
+                                <p class="text-xs text-slate-400 font-mono">THERMODYNAMIQUE & RELATIVITÉ</p>
+                            </button>
+
+                            <button onclick="startHero('deadpool')" class="hero-card glass-panel rounded-2xl border-2 border-white/10 p-6 flex flex-col items-center justify-center gap-4 relative overflow-hidden group" style="--hero-color: #ec4899; --hero-glow: rgba(236, 72, 153, 0.4);">
+                                <span class="material-symbols-outlined text-6xl text-pink-500 mb-2">healing</span>
+                                <h3 class="text-2xl font-bold text-white group-hover:text-pink-400">DEADPOOL</h3>
+                                <p class="text-xs text-slate-400 font-mono">RÉGÉNÉRATION & BIOLOGIE</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AQUAMAN SECTION -->
+                <div class="slide" data-hero="aquaman">
+                    <div class="w-full h-full grid grid-cols-12 gap-8 items-center">
+                        <div class="col-span-5 flex flex-col justify-center space-y-4">
+                            <div>
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold tracking-widest mb-3">
+                                    <span class="material-symbols-outlined text-xs">science</span>
+                                    BIOPHYSIQUE
+                                </div>
+                                <h2
+                                    class="text-adaptive-title font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 gold-glow">
+                                    DIEU OU<br>ABERRATION ?
+                                </h2>
+                            </div>
+                            <p class="text-adaptive-body text-slate-300 border-l-4 border-amber-500 pl-6">
+                                Bonjour à tous. On connait tous Aquaman... le trident, les poissons... Ça fait sourire. Mais aujourd'hui, on ne va pas parler de magie. On va parler de <strong>biophysique</strong>.
+                                <br><br>
+                                Arthur Curry règne sur 70% de la planète. Notre objectif est simple : si on applique les vraies lois de la physique et de la biologie à ses pouvoirs, est-ce qu'Aquaman est un dieu... ou une aberration scientifique ?
+                            </p>
+                            <button class="w-fit group bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-lg font-bold text-sm transition-all shadow-[0_0_20px_rgba(8,145,178,0.4)] flex items-center gap-2" onclick="goToSlide(1)">
+                                DÉMARRER
+                                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </button>
+                        </div>
+                        <div class="col-span-7 h-[85%] relative rounded-xl overflow-hidden border border-white/10 shadow-2xl group">
+                            <img alt="Aquaman Cinematic" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="images/Aquaman_Cinematic.png">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80"></div>
+                            <div class="absolute bottom-4 right-6 text-right">
+                                <p class="text-amber-400 font-mono text-xs">SUJET: ARTHUR CURRY</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="aquaman">
+                    <div class="flex items-end justify-between mb-4 border-b border-white/10 pb-2 w-full flex-shrink-0">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white"><span class="text-cyan-500">01.</span> RESPIRATION</h3>
+                            <p class="text-xs text-slate-400 font-mono">LOI DE BOYLE-MARIOTTE</p>
+                        </div>
+                        <div class="flex bg-slate-800 p-1 rounded-lg gap-1 scale-90 origin-right">
+                            <button class="px-4 py-1 rounded text-xs font-bold bg-amber-500 text-black shadow transition-all" id="btn-air" onclick="setBreathing('air')">POUMONS (AIR)</button>
+                            <button class="px-4 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition-all" id="btn-liquid" onclick="setBreathing('liquid')">LIQUIDE (PFC)</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8 w-full h-full min-h-0 items-center">
+                        <div class="glass-panel rounded-xl relative flex flex-col items-center justify-center p-4 overflow-hidden h-[85%]">
+                            <img alt="Lungs" class="h-[80%] w-auto object-contain z-10 drop-shadow-[0_0_20px_rgba(34,211,238,0.3)]" src="images/Lungs.png">
+                            <div class="absolute bottom-0 left-0 w-full bg-cyan-500/30 border-t border-cyan-400 transition-all duration-1000 ease-in-out h-0 z-0" id="liquid-overlay"></div>
+                            <div class="absolute top-4 left-4 z-20 bg-black/60 p-2 rounded border border-white/10 backdrop-blur-sm">
+                                <h4 class="text-sm font-bold text-amber-500 mb-0.5 transition-colors" id="breath-status-title">Mode Air (Classique)</h4>
+                                <p class="text-[10px] text-slate-300 max-w-[200px]" id="breath-status-desc">Nos poumons sont des sacs d'air. Sous l'eau, ils seraient réduits à la taille d'une balle de ping-pong.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 justify-center h-[85%]">
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-amber-500">
+                                <h4 class="font-bold text-white text-base mb-1 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-amber-500 text-lg">warning</span> Le Problème
+                                </h4>
+                                <p class="text-adaptive-body text-slate-300">
+                                    Si Aquaman avait des poumons comme les nôtres remplis d'air, ils seraient <strong>écrasés instantanément</strong> par la pression. C'est la loi de Boyle-Mariotte.
+                                </p>
+                            </div>
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-cyan-500">
+                                <h4 class="font-bold text-white text-base mb-1 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-cyan-500 text-lg">science</span> La Solution : Ventilation Liquide
+                                </h4>
+                                <p class="text-adaptive-body text-slate-300">
+                                    Au lieu d'air, on remplit les poumons d'un liquide riche en oxygène : le <strong>Perfluorocarbure (PFC)</strong>.
+                                    <br>
+                                    Comme un liquide est <strong>incompressible</strong>, les poumons ne s'écrasent pas. On l'utilise déjà en médecine pour certains grands prématurés.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="aquaman">
+                    <div class="flex items-end justify-between mb-4 border-b border-white/10 pb-2 w-full flex-shrink-0">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white"><span class="text-cyan-500">02.</span> PRESSION &amp; DENSITÉ</h3>
+                            <p class="text-xs text-slate-400 font-mono">1000 ATMOSPHÈRES = 1 ÉLÉPHANT SUR LE POUCE</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 w-full h-full min-h-0">
+                        <div class="w-1/4 glass-panel rounded-xl flex flex-col p-4 items-center relative h-[90%]">
+                            <div class="w-full mb-4 text-center">
+                                <div class="text-3xl font-black text-white font-mono" id="depth-val">-0m</div>
+                                <div class="text-cyan-400 font-mono text-xs" id="atm-val">1 ATM</div>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-3 w-full mb-4 border border-white/5 text-center transition-all" id="elephant-box">
+                                <div class="flex items-center justify-center gap-1 text-slate-500" id="elephant-icons"><span class="material-symbols-outlined text-2xl">sentiment_satisfied</span></div>
+                                <p class="text-[10px] text-white mt-1 font-bold" id="elephant-text">Négligeable</p>
+                            </div>
+                            <div class="flex-grow w-full relative bg-slate-900 rounded-full overflow-hidden cursor-pointer group" id="slider-track-area">
+                                <div class="absolute inset-x-0 top-0 bg-gradient-to-b from-cyan-500 via-blue-600 to-black opacity-50 h-full"></div>
+                                <div class="absolute right-3 top-2 text-[8px] text-slate-400">Surface</div>
+                                <div class="absolute right-3 top-[35%] text-[8px] text-slate-400">Titanic</div>
+                                <div class="absolute right-3 bottom-2 text-[8px] text-slate-400">Mariannes</div>
+                                <div class="absolute left-0 right-0 h-10 -mt-5 flex items-center justify-center z-20 pointer-events-none transition-transform duration-75" id="slider-thumb" style="top: 0%;">
+                                    <div class="w-8 h-8 bg-white/90 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.8)] flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-slate-900 text-xs">drag_handle</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[9px] text-slate-500 mt-2 uppercase tracking-widest animate-pulse">Glissez pour plonger</p>
+                        </div>
+                        <div class="w-3/4 flex flex-col gap-4 h-[90%]">
+                            <div class="flex-grow relative rounded-xl overflow-hidden border border-white/10 shadow-xl">
+                                <img alt="Surface" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" id="depth-img" src="images/Surface.png">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-6">
+                                    <h4 class="text-xl font-bold text-white mb-1" id="depth-title">La Surface</h4>
+                                    <p class="text-adaptive-body text-slate-300" id="depth-desc">Ici, tout va bien. Mais l'eau est lourde.</p>
+                                </div>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl border-l-4 border-white">
+                                <h5 class="font-bold text-white text-xs mb-1 uppercase tracking-widest">Le Facteur Aquaman</h5>
+                                <p class="text-adaptive-body text-slate-300" id="aquaman-factor">
+                                    Pour survivre ici sans être broyé, sa peau, ses os et ses muscles doivent être incroyablement denses. S'il remonte à la surface, cette densité le rend naturellement <strong>invulnérable aux balles</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="aquaman">
+                    <div class="flex items-end justify-between mb-4 border-b border-white/10 pb-2 w-full flex-shrink-0">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white"><span class="text-cyan-500">03.</span> VITESSE &amp; CHALEUR</h3>
+                            <p class="text-xs text-slate-400 font-mono">FRANCHIR LE MUR DU SON SOUS L'EAU</p>
+                        </div>
+                        <button class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded text-[10px] font-bold text-white border border-white/10 transition-all" onclick="triggerSpeed()">
+                            LANCER SIMULATION
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-12 gap-8 w-full h-full min-h-0 items-center">
+                        <div class="col-span-7 glass-panel p-6 rounded-xl border border-white/5 flex flex-col justify-center gap-6">
+                            <div class="w-full">
+                                <div class="flex justify-between text-[10px] uppercase text-slate-400 font-bold mb-1">
+                                    <span>Nageur Olympique</span> <span>9 km/h</span>
+                                </div>
+                                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-slate-500 speed-bar-fill" style="width: 1%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex justify-between text-[10px] uppercase text-slate-400 font-bold mb-1">
+                                    <span>Espadon</span> <span>110 km/h</span>
+                                </div>
+                                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-cyan-600 speed-bar-fill" style="width: 15%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <div class="flex justify-between text-[10px] uppercase text-white font-bold mb-1">
+                                    <span>Torpille Shkval (Supercavitation)</span> <span>370 km/h</span>
+                                </div>
+                                <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-purple-500 speed-bar-fill" style="width: 30%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+                                </div>
+                            </div>
+                            <div class="w-full pt-2 border-t border-white/10 mt-1 relative">
+                                <div class="flex justify-between text-xs uppercase text-amber-400 font-bold mb-1 gold-glow">
+                                    <span>Aquaman</span> <span>~3000 km/h (Mach 2)</span>
+                                </div>
+                                <div class="h-4 bg-slate-800 rounded-full overflow-hidden border border-amber-500/30">
+                                    <div class="h-full bg-gradient-to-r from-amber-600 via-yellow-400 to-white speed-bar-fill shadow-[0_0_15px_rgba(251,191,36,0.8)]" style="width: 95%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);"></div>
+                                </div>
+                                <div class="absolute right-0 top-4 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded animate-pulse shadow-lg">BOOM SONIQUE</div>
+                            </div>
+                        </div>
+                        <div class="col-span-5 flex flex-col gap-4 h-full justify-center">
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-purple-500">
+                                <h5 class="font-bold text-white text-base mb-1">La Supercavitation</h5>
+                                <p class="text-adaptive-body text-slate-300">
+                                    L'eau est 800 fois plus dense que l'air (c'est de la mélasse). Aquaman dépasse Mach 2. Impossible sans <strong>Supercavitation</strong> : créer une bulle de gaz autour de soi pour "voler" sans toucher l'eau.
+                                </p>
+                            </div>
+                            <div class="bg-red-950/40 border border-red-500/50 p-5 rounded-xl">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="material-symbols-outlined text-red-500 text-lg">thermostat</span>
+                                    <h5 class="text-red-400 font-bold text-base">Le Problème Thermodynamique</h5>
+                                </div>
+                                <p class="text-red-200 text-xs leading-relaxed">
+                                    Mais il y a un hic : la friction à la pointe de la bulle générerait une chaleur telle que l'eau se vaporiserait. <strong>Aquaman finirait bouilli dans sa propre vague.</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="aquaman">
+                    <div class="text-center mb-6 w-full flex-shrink-0">
+                        <h3 class="text-3xl font-bold text-white mb-1">PIRATAGE BIOLOGIQUE</h3>
+                        <p class="text-xs text-slate-400 uppercase tracking-widest">Oubliez la poésie, c'est de la Bio-Acoustique</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-8 w-full px-8 h-[80%] items-center">
+                        <div class="glass-panel p-1 rounded-2xl border border-amber-500/20 group hover:border-amber-500/50 transition-all duration-500 h-full">
+                            <div class="w-full h-full bg-gradient-to-br from-amber-900/10 to-transparent rounded-[0.9rem] p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                                <span class="material-symbols-outlined text-5xl text-amber-500 mb-4 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">psychology</span>
+                                <h4 class="text-xl font-bold text-amber-400 mb-2">Le Mythe : Télépathie</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    "Je discute avec les poissons."<br>
+                                    Une vision romantique où Aquaman a des conversations complexes.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-1 rounded-2xl border border-cyan-500/20 group hover:border-cyan-500/50 transition-all duration-500 h-full">
+                            <div class="w-full h-full bg-gradient-to-br from-cyan-900/10 to-transparent rounded-[0.9rem] p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                                <span class="material-symbols-outlined text-5xl text-cyan-500 mb-4 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">settings_ethernet</span>
+                                <h4 class="text-xl font-bold text-cyan-400 mb-2">La Science : Piratage</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                                    Scientifiquement, c'est de la bio-acoustique (Sonar) et de l'électromagnétisme. Il pirate leur cerveau basal.
+                                </p>
+                                <div class="grid grid-cols-2 gap-3 w-full max-w-xs">
+                                    <button class="bg-red-900/50 border border-red-500/50 text-red-300 py-1.5 rounded text-[10px] font-mono hover:bg-red-500 hover:text-white transition-all">
+                                        &gt; CMD: ATTAQUE
+                                    </button>
+                                    <button class="bg-green-900/50 border border-green-500/50 text-green-300 py-1.5 rounded text-[10px] font-mono hover:bg-green-500 hover:text-white transition-all">
+                                        &gt; CMD: DÉFENSE
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="aquaman">
+                    <div class="w-full h-full flex flex-col items-center justify-center gap-8">
+                        <h2 class="text-4xl font-black text-white tracking-tight">VERDICT SCIENTIFIQUE</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl">
+                            <div class="glass-panel p-4 rounded-xl border-t-4 border-green-500 text-center flex flex-col gap-2 transform hover:-translate-y-1 transition-transform">
+                                <span class="text-3xl">💪</span>
+                                <h4 class="font-bold text-white text-sm mt-1">PRESSION</h4>
+                                <div class="bg-green-500/20 text-green-400 text-[10px] font-bold py-0.5 px-2 rounded-full inline-block mx-auto">PLAUSIBLE</div>
+                                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Évolution extrême. Densité musculaire cohérente.</p>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl border-t-4 border-yellow-500 text-center flex flex-col gap-2 transform hover:-translate-y-1 transition-transform">
+                                <span class="text-3xl">🫁</span>
+                                <h4 class="font-bold text-white text-sm mt-1">RESPIRATION</h4>
+                                <div class="bg-yellow-500/20 text-yellow-400 text-[10px] font-bold py-0.5 px-2 rounded-full inline-block mx-auto">THÉORIQUE</div>
+                                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Ventilation liquide (PFC) possible mais technologique.</p>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl border-t-4 border-cyan-500 text-center flex flex-col gap-2 transform hover:-translate-y-1 transition-transform">
+                                <span class="text-3xl">📡</span>
+                                <h4 class="font-bold text-white text-sm mt-1">COMMUNICATION</h4>
+                                <div class="bg-cyan-500/20 text-cyan-400 text-[10px] font-bold py-0.5 px-2 rounded-full inline-block mx-auto">POSSIBLE</div>
+                                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Piratage de fréquences (Sonar, Electroception).</p>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl border-t-4 border-red-500 text-center flex flex-col gap-2 transform hover:-translate-y-1 transition-transform">
+                                <span class="text-3xl">🔥</span>
+                                <h4 class="font-bold text-white text-sm mt-1">VITESSE</h4>
+                                <div class="bg-red-500/20 text-red-400 text-[10px] font-bold py-0.5 px-2 rounded-full inline-block mx-auto">IMPOSSIBLE</div>
+                                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">L'eau bouillirait. Thermodynamique inviolable.</p>
+                            </div>
+                        </div>
+                        <div class="max-w-2xl text-center mt-4">
+                            <p class="text-xl font-light text-slate-200 italic leading-relaxed">
+                                "Au final, Aquaman n'est pas un magicien. C'est un <strong>chef-d'œuvre d'ingénierie biologique</strong>... avec juste ce qu'il faut d'exagération pour en faire un super-héros."
+                            </p>
+                        </div>
+                        <button class="mt-4 flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs" onclick="goToSlide(0)">
+                            <span class="material-symbols-outlined text-sm">replay</span> Relancer l'Exposé
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SPIDERMAN SECTION (5 SLIDES) -->
+                <div class="slide" data-hero="spiderman">
+                    <div class="w-full h-full grid grid-cols-12 gap-8 items-center">
+                        <div class="col-span-5 flex flex-col justify-center space-y-4">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-900/30 border border-red-500/30 text-red-400 text-[10px] font-bold tracking-widest mb-3">
+                                    DOSSIER #02
+                                </div>
+                                <h2 class="text-adaptive-title font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-blue-600 red-glow">
+                                    L'ARAIGNÉE<br>HUMAINE
+                                </h2>
+                            </div>
+                            <p class="text-adaptive-body text-slate-300 border-l-4 border-red-500 pl-6">
+                                Peter Parker est un cas d'école en sciences des matériaux et en biomimétisme : adhérence moléculaire, soie ultra-résistante, réflexes fulgurants.
+                            </p>
+                        </div>
+                        <div class="col-span-7 h-[85%] relative rounded-xl overflow-hidden border border-white/10 shadow-2xl group">
+                            <img src="images/Spider-Man intro.png" class="absolute inset-0 w-full h-full object-cover" alt="Spider-Man intro">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="spiderman">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                        <div class="flex-1 glass-panel rounded-2xl p-1 relative overflow-hidden">
+                            <div class="flex p-2 gap-2 bg-slate-900/50 rounded-t-xl z-20 relative">
+                                <button onclick="setAdhesionMode('fiction')" id="btn-fiction" class="flex-1 py-3 rounded-lg bg-red-600 text-white font-bold transition-all shadow-lg">FICTION (Cinéma)</button>
+                                <button onclick="setAdhesionMode('reality')" id="btn-reality" class="flex-1 py-3 rounded-lg bg-slate-800 text-slate-400 font-bold hover:bg-slate-700 transition-all">RÉALITÉ (Biologie)</button>
+                            </div>
+                            <div class="relative h-[380px] w-full bg-black overflow-hidden">
+                                <img id="img-fiction" src="images/Fiction.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-100" alt="Fiction">
+                                <img id="img-reality" src="images/Réalité.png" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 opacity-0" alt="Réalité">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
+                                    <h4 id="adh-title" class="text-2xl font-bold text-red-500 mb-1">Micro-scopules rétractables</h4>
+                                    <p id="adh-desc" class="text-slate-200 text-sm leading-relaxed">Mutation fictive : des poils microscopiques barbelés pour coller partout.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 justify-center">
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-red-500">
+                                <h5 class="font-bold text-white text-base mb-1">Adhérence moléculaire</h5>
+                                <p class="text-adaptive-body text-slate-300">Pas de colle : des forces de Van der Waals, comme les geckos. Des millions de micro-poils répartissent la charge.</p>
+                            </div>
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-blue-500">
+                                <h5 class="font-bold text-white text-base mb-1">Surface de contact</h5>
+                                <p class="text-adaptive-body text-slate-300">À l'échelle humaine, il faut couvrir mains et avant-bras de setae pour obtenir l'adhérence nécessaire.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="spiderman">
+                    <div class="flex items-end justify-between mb-4 border-b border-white/10 pb-2 w-full flex-shrink-0">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white"><span class="text-red-500">02.</span> Résistance de la toile</h3>
+                            <p class="text-xs text-slate-400 font-mono">Module de Young & rupture</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 h-full items-center">
+                        <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-2xl">
+                            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-yellow-500">experiment</span> Test de traction</h3>
+                            <div class="mb-6">
+                                <div class="flex justify-between text-xs uppercase text-slate-400 mb-1"><span>Câble en Acier</span><span id="steel-val">0 MPa</span></div>
+                                <div class="w-full bg-slate-900 rounded-full h-4 overflow-hidden relative"><div id="bar-steel" class="h-full bg-gray-500 transition-all duration-300 w-0"></div><div id="break-steel" class="hidden absolute right-2 top-0 text-[10px] text-red-500 font-bold bg-black px-1 rounded">CASSE</div></div>
+                            </div>
+                            <div class="mb-6">
+                                <div class="flex justify-between text-xs uppercase text-slate-400 mb-1"><span>Kevlar</span><span id="kevlar-val">0 MPa</span></div>
+                                <div class="w-full bg-slate-900 rounded-full h-4 overflow-hidden relative"><div id="bar-kevlar" class="h-full bg-yellow-600 transition-all duration-300 w-0"></div></div>
+                            </div>
+                            <div class="mb-8">
+                                <div class="flex justify-between text-xs uppercase text-slate-400 mb-1"><span>Soie Darwin</span><span id="silk-val">0 MPa</span></div>
+                                <div class="w-full bg-slate-900 rounded-full h-4 overflow-hidden relative"><div id="bar-silk" class="h-full bg-blue-500 transition-all duration-300 w-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div></div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs text-center text-slate-400">Glissez pour appliquer la force</label>
+                                <input type="range" min="0" max="2000" value="0" id="tension-slider" oninput="updateSimulation(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-green-500">
+                                <h4 class="font-bold text-white text-base mb-1">Soie > Acier</h4>
+                                <p class="text-adaptive-body text-slate-300">La soie de Darwin atteint ~1800 MPa. La version Spider-Man grimpe encore : ~4500 MPa.</p>
+                            </div>
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-white text-base mb-1">Élasticité</h4>
+                                <p class="text-adaptive-body text-slate-300">Extensible à 500% sans casser : parfait pour absorber l'énergie d'une chute.</p>
+                            </div>
+                            <div class="glass-panel p-5 rounded-xl border-l-4 border-blue-500">
+                                <h4 class="font-bold text-white text-base mb-1">Applications</h4>
+                                <p class="text-adaptive-body text-slate-300">Câbles spatiaux, filets de capture, cordes ultra-légères : le biomimétisme inspire l'ingénierie.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="spiderman">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                        <div class="flex-1 relative rounded-2xl overflow-hidden border border-slate-600 group">
+                            <img src="images/Vision araignée.png" class="absolute inset-0 w-full h-full object-cover" alt="Vision araignée">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                        </div>
+                        <div class="flex-1 space-y-4">
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-red-500">
+                                <h3 class="font-bold text-white text-lg">Fiction</h3>
+                                <p class="text-sm text-slate-300">Précognition quasi instantanée : le "sens d'araignée" vibre avant le danger.</p>
+                            </div>
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-green-500">
+                                <h3 class="font-bold text-white text-lg">Réalité biologique</h3>
+                                <p class="text-sm text-slate-300">Les araignées sauteuses réagissent en 15 ms. Vision exceptionnelle, traitement nerveux ultra-rapide.</p>
+                            </div>
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-blue-500">
+                                <h3 class="font-bold text-white text-lg">Technologie humaine</h3>
+                                <p class="text-sm text-slate-300">LIDAR et radar : perception périphérique 360° pour anticiper les obstacles invisibles.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="spiderman">
+                    <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 h-full pb-4">
+                        <div class="glass-panel p-6 rounded-xl flex flex-col items-center text-center group">
+                            <img src="images/Fourmi.png" class="w-28 h-28 rounded-full object-cover mb-4 border-4 border-slate-700 shadow-xl" alt="Fourmi">
+                            <h3 class="text-xl font-bold text-white">La fourmi</h3>
+                            <p class="text-sm text-slate-300">Force x50 grâce au rapport masse/surface et au nombre de points d'appui.</p>
+                        </div>
+                        <div class="glass-panel p-6 rounded-xl flex flex-col items-center text-center group">
+                            <img src="images/Araignée.png" class="w-28 h-28 rounded-full object-cover mb-4 border-4 border-slate-700 shadow-xl" alt="Araignée">
+                            <h3 class="text-xl font-bold text-white">L'araignée</h3>
+                            <p class="text-sm text-slate-300">La loi du carré-cube limite : une araignée géante s'effondrerait sous son propre poids.</p>
+                        </div>
+                        <div class="glass-panel p-6 rounded-xl flex flex-col items-center text-center group">
+                            <img src="images/Exosquelette.png" class="w-28 h-28 rounded-full object-cover mb-4 border-4 border-slate-700 shadow-xl" alt="Exosquelette">
+                            <h3 class="text-xl font-bold text-white">L'exosquelette</h3>
+                            <p class="text-sm text-slate-300">Solution réaliste : hydraulique + matériaux composites pour reproduire la force proportionnelle.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide" data-hero="spiderman">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full pb-6">
+                        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-600">
+                            <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-blue-400">quiz</span> Quiz rapide</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm font-bold mb-2">1. Quel animal inspire l'adhérence ?</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="checkAnswer(this, false)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Grenouille</button>
+                                        <button onclick="checkAnswer(this, true)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Gecko</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold mb-2">2. La soie d'araignée est plus forte que :</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="checkAnswer(this, true)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Kevlar</button>
+                                        <button onclick="checkAnswer(this, false)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Diamant</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold mb-2">3. Un humain géant serait :</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="checkAnswer(this, false)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Plus fort</button>
+                                        <button onclick="checkAnswer(this, true)" class="flex-1 bg-slate-700 hover:bg-slate-600 p-2 rounded text-xs">Effondré</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="quiz-result" class="hidden mt-4 text-center font-bold text-green-400">Excellent travail Parker !</div>
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <div class="glass-panel p-8 rounded-2xl text-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-red-900/20"></div>
+                                <h3 class="relative z-10 text-3xl font-black text-white mb-6 uppercase">Conclusion</h3>
+                                <p class="relative z-10 text-slate-300 text-lg leading-relaxed mb-6">Spider-Man est l'un des héros les plus plausibles scientifiquement : adhérence, soie et réflexes sont crédibles. Reste la force proportionnelle : elle demande un exosquelette.</p>
+                                <div class="relative z-10 flex justify-center gap-3 text-xs font-mono text-slate-500"><span>REF: NATURE</span><span>•</span><span>MIT TECH REVIEW</span><span>•</span><span>JOURNAL OF BIOLOGY</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLASH SECTION 1: INTRO -->
+                <div class="slide" data-hero="flash">
+                    <div class="relative z-10 w-full flex flex-col items-center justify-center slide-enter-right">
+                        <div class="text-center max-w-5xl mx-auto">
+                            <h1 class="text-8xl md:text-[10rem] text-yellow-400 text-shadow-comic italic transform -skew-x-12 mb-2 leading-none">THE FLASH</h1>
+                            <div class="h-2 w-full bg-gradient-to-r from-transparent via-red-600 to-transparent mb-8"></div>
+                            <h2 class="text-3xl md:text-5xl text-white font-bold tracking-[0.2em] uppercase mb-4">Humain vs Nature</h2>
+                            <p class="text-xl text-gray-400 font-light tracking-wider">Comparatif des limites biologiques du corps en mouvement.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLASH SECTION 2: SPEED -->
+                <div class="slide" data-hero="flash">
+                    <div class="relative z-10 w-full max-w-7xl flex flex-col items-center pt-4 slide-enter-right mx-auto">
+                        <h2 class="text-5xl md:text-7xl text-yellow-500 comic-font mb-2 text-shadow-comic">VITESSE & AERODYNAMISME</h2>
+                        <h3 class="text-xl text-gray-400 font-bold mb-8 uppercase tracking-widest bg-gray-900 px-4 py-1 rounded-full border border-gray-700">Comparatif 0 - 1225 km/h</h3>
+                        <div class="w-full max-w-6xl mx-auto bg-black/40 p-8 rounded-2xl border border-gray-800 backdrop-blur-md">
+                            <div class="flex justify-between text-xs text-gray-500 font-mono uppercase mb-1">
+                                <span>0 km/h</span>
+                                <span>Mur du Son (1225 km/h)</span>
+                            </div>
+                            <div class="relative h-20 w-full bg-gray-800 rounded-lg border border-gray-600 mb-8 overflow-hidden shadow-inner">
+                                <div class="absolute inset-0 flex">
+                                    <div class="w-[25%] border-r border-gray-700/50 h-full"></div>
+                                    <div class="w-[25%] border-r border-gray-700/50 h-full"></div>
+                                    <div class="w-[25%] border-r border-gray-700/50 h-full"></div>
+                                </div>
+                                <div class="absolute top-2 left-[4%] z-20 text-[10px] text-gray-400 border-l border-gray-500 pl-1">Bolt</div>
+                                <div class="absolute top-2 left-[10%] z-20 text-[10px] text-gray-400 border-l border-gray-500 pl-1">Guépard</div>
+                                <div class="absolute top-2 left-[31.7%] z-20 text-[10px] text-gray-400 border-l border-gray-500 pl-1">Faucon</div>
+                                <div id="speed-bar" class="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-600 w-0 transition-all duration-700 ease-out relative shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                    <div class="absolute right-0 top-0 bottom-0 w-1 bg-white shadow-[0_0_15px_white]"></div>
+                                    <div class="absolute right-2 top-1/2 -translate-y-1/2 font-bold text-black font-mono bg-white/90 px-2 rounded text-sm" id="speed-value-display">0 km/h</div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="speed-card cursor-pointer bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-white transition p-4 rounded-xl flex flex-col items-center group relative overflow-hidden h-40" data-speed="44.7" data-name="Usain Bolt" data-label="44.7 km/h" data-desc="L'humain le plus rapide. Limité par la contraction musculaire." data-img="/image?query=Usain+Bolt+sprinting+olympics&aspect=4:3">
+                                    <img src="images/Usain Bolt.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition" alt="Usain Bolt">
+                                    <div class="relative z-10 text-center mt-auto"><h3 class="font-bold text-white text-lg">HUMAIN</h3><p class="text-sm text-gray-300">Usain Bolt</p></div>
+                                </div>
+                                <div class="speed-card cursor-pointer bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-400 transition p-4 rounded-xl flex flex-col items-center group relative overflow-hidden h-40" data-speed="120" data-name="Guépard" data-label="120 km/h" data-desc="Colonne vertébrale flexible. Surchauffe critique après 30s." data-img="/image?query=cheetah+running+full+speed&aspect=4:3">
+                                    <img src="images/Cheetah.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition" alt="Cheetah">
+                                    <div class="relative z-10 text-center mt-auto"><h3 class="font-bold text-orange-400 text-lg">NATURE</h3><p class="text-sm text-gray-300">Guépard</p></div>
+                                </div>
+                                <div class="speed-card cursor-pointer bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-blue-400 transition p-4 rounded-xl flex flex-col items-center group relative overflow-hidden h-40" data-speed="389" data-name="Faucon Pèlerin" data-label="389 km/h" data-desc="Vitesse atteinte en piqué gravitaire." data-img="/image?query=peregrine+falcon+diving&aspect=4:3">
+                                    <img src="images/Falcon.png" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition" alt="Falcon">
+                                    <div class="relative z-10 text-center mt-auto"><h3 class="font-bold text-blue-400 text-lg">AÉRIEN</h3><p class="text-sm text-gray-300">Faucon Pèlerin</p></div>
+                                </div>
+                                <div class="speed-card cursor-pointer bg-red-900/50 hover:bg-red-800 border-2 border-red-600 hover:border-yellow-400 transition p-4 rounded-xl flex flex-col items-center group relative overflow-hidden h-40 shadow-[0_0_20px_rgba(220,38,38,0.3)]" data-speed="1225" data-name="THE FLASH" data-label="1225 km/h" data-desc="Mach 1. Vitesse du son. La friction de l'air brûlerait n'importe quel organisme biologique." data-img="/gen?prompt=The+Flash+breaking+sound+barrier+shockwave+comic+style&aspect=4:3">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-red-900 to-transparent opacity-80"></div>
+                                    <div class="relative z-10 flex flex-col items-center justify-center h-full"><span class="material-symbols-outlined text-4xl text-yellow-400 mb-2 animate-pulse">bolt</span><h3 class="font-black text-white text-xl italic">THE FLASH</h3><p class="text-xs text-yellow-200 font-mono mt-1">MUR DU SON</p></div>
+                                </div>
+                            </div>
+                            <div id="speed-info" class="mt-6 p-4 bg-gray-900/80 border-l-4 border-gray-600 rounded min-h-[80px] flex items-center">
+                                <p class="text-gray-400 italic">Cliquez sur une carte ci-dessus pour comparer...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLASH SECTION 3: REFLEX -->
+                <div class="slide" data-hero="flash">
+                    <div class="w-full max-w-7xl flex flex-col md:flex-row gap-12 items-center slide-enter-right h-[80vh] mx-auto">
+                        <div class="w-full md:w-5/12 h-full max-h-[600px] relative rounded-lg overflow-hidden border-2 border-gray-800 shadow-2xl">
+                            <img src="images/Fly Eye.png" class="w-full h-full object-cover" alt="Fly Eye">
+                            <div class="absolute bottom-0 w-full bg-black/80 p-3 text-center text-xs text-gray-400">Œil à facettes : traitement d'image ultrarapide.</div>
+                        </div>
+                        <div class="w-full md:w-7/12 flex flex-col justify-center">
+                            <h2 class="text-6xl text-yellow-500 comic-font mb-6 text-shadow-comic tracking-wide">PERCEPTION TEMPORELLE</h2>
+                            <div class="text-lg text-gray-200 leading-relaxed">
+                                <div class="space-y-8">
+                                    <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                                        <h3 class="text-xl text-gray-300 uppercase tracking-widest mb-6">Vitesse de Traitement Cérébral</h3>
+                                        <div class="space-y-6">
+                                            <div class="relative">
+                                                <div class="flex justify-between items-end mb-1">
+                                                    <span class="text-lg font-bold">Humain</span>
+                                                    <span class="font-mono text-gray-400">0.25 sec</span>
+                                                </div>
+                                                <div class="h-2 bg-gray-800 rounded overflow-hidden">
+                                                    <div class="h-full bg-blue-500 w-full"></div>
+                                                </div>
+                                            </div>
+                                            <div class="relative">
+                                                <div class="flex justify-between items-end mb-1">
+                                                    <span class="text-lg font-bold">Mouche</span>
+                                                    <span class="font-mono text-gray-400">0.02 sec</span>
+                                                </div>
+                                                <div class="h-2 bg-gray-800 rounded overflow-hidden">
+                                                    <div class="h-full bg-green-500 w-[8%]"></div>
+                                                </div>
+                                                <p class="text-xs text-green-500 mt-1">10x plus rapide que nous.</p>
+                                            </div>
+                                            <div class="relative">
+                                                <div class="flex justify-between items-end mb-1">
+                                                    <span class="text-2xl font-black text-yellow-400 italic">The Flash</span>
+                                                    <span class="font-mono text-yellow-400 text-xl">1 Nanoseconde</span>
+                                                </div>
+                                                <div class="h-3 bg-gray-800 rounded overflow-hidden relative shadow-[0_0_10px_rgba(234,179,8,0.3)]">
+                                                    <div class="h-full bg-yellow-400 w-[0.1%] animate-pulse"></div>
+                                                </div>
+                                                <p class="text-xs text-yellow-500 mt-1 font-mono">0.000000001 sec. Le temps que la lumière parcourt 30cm.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLASH SECTION 4: METABOLISM -->
+                <div class="slide" data-hero="flash">
+                    <div class="relative z-10 w-full max-w-7xl flex flex-col items-center pt-4 slide-enter-right mx-auto">
+                        <h2 class="text-5xl md:text-7xl text-yellow-500 comic-font mb-2 text-shadow-comic">MÉTABOLISME & ÉNERGIE</h2>
+                        <h3 class="text-xl text-gray-400 font-bold mb-8 uppercase tracking-widest bg-gray-900 px-4 py-1 rounded-full border border-gray-700">La Consommation Calorique</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto w-full">
+                            <div class="bg-black/80 p-6 rounded-2xl border border-green-900 backdrop-blur flex flex-col text-center shadow-lg">
+                                <div class="h-48 overflow-hidden rounded-lg mb-4 border border-green-500/20 relative">
+                                    <img src="images/Hummingbird.png" class="w-full h-full object-cover" alt="Hummingbird">
+                                    <div class="absolute bottom-0 left-0 bg-green-900/80 px-2 py-1 text-xs text-white">Référence Nature</div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-green-500 mb-4">Le Colibri</h3>
+                                <div class="grid grid-cols-2 gap-4 text-left">
+                                    <div class="bg-green-900/20 p-3 rounded">
+                                        <div class="text-xs text-gray-400 uppercase">Cœur</div>
+                                        <div class="text-xl font-mono text-green-400">1,200 <span class="text-xs">bpm</span></div>
+                                    </div>
+                                    <div class="bg-green-900/20 p-3 rounded">
+                                        <div class="text-xs text-gray-400 uppercase">Calories</div>
+                                        <div class="text-xl font-mono text-green-400">Intense</div>
+                                    </div>
+                                </div>
+                                <p class="mt-4 text-sm text-gray-400">Doit consommer la moitié de son poids en sucre chaque jour.</p>
+                            </div>
+                            <div class="bg-gradient-to-b from-red-950 to-black p-6 rounded-2xl border border-red-600 backdrop-blur flex flex-col text-center shadow-[0_0_30px_rgba(220,38,38,0.2)] relative">
+                                <div class="h-48 overflow-hidden rounded-lg mb-4 border border-red-500/20 relative">
+                                    <img src="images/Flash Eating.png" class="w-full h-full object-cover" alt="Flash Eating">
+                                    <div class="absolute bottom-0 left-0 bg-red-600 px-2 py-1 text-xs text-white font-bold">Fiction</div>
+                                </div>
+                                <h3 class="text-3xl font-black text-yellow-400 italic mb-4">THE FLASH</h3>
+                                <div class="grid grid-cols-2 gap-4 text-left">
+                                    <div class="bg-red-900/30 p-3 rounded border border-red-500/30">
+                                        <div class="text-xs text-gray-400 uppercase">Cœur</div>
+                                        <div class="text-2xl font-mono text-red-400 animate-pulse">4,500 <span class="text-sm">bpm</span></div>
+                                    </div>
+                                    <div class="bg-red-900/30 p-3 rounded border border-red-500/30">
+                                        <div class="text-xs text-gray-400 uppercase">Calories</div>
+                                        <div class="text-2xl font-mono text-red-400">150,000 <span class="text-sm">kcal</span></div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 bg-red-600/20 p-2 rounded text-red-200 text-sm font-bold border border-red-600/50">
+                                    = 300 Burgers / Jour
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FLASH SECTION 5: QUANTUM -->
+                <div class="slide" data-hero="flash">
+                    <div class="w-full max-w-7xl flex flex-col md:flex-row gap-12 items-center slide-enter-right h-[80vh] mx-auto">
+                        <div class="w-full md:w-5/12 h-full max-h-[600px] relative rounded-lg overflow-hidden border-2 border-gray-800 shadow-2xl">
+                            <img src="images/Quantum Tunneling.png" class="w-full h-full object-cover" alt="Quantum Tunneling">
+                            <div class="absolute bottom-0 w-full bg-black/80 p-3 text-center text-xs text-gray-400">Schéma : L'Effet Tunnel Quantique.</div>
+                        </div>
+                        <div class="w-full md:w-7/12 flex flex-col justify-center">
+                            <h2 class="text-6xl text-yellow-500 comic-font mb-6 text-shadow-comic tracking-wide">INTANGIBILITÉ</h2>
+                            <div class="text-lg text-gray-200 leading-relaxed">
+                                <div class="space-y-8">
+                                    <div>
+                                        <h3 class="text-2xl text-yellow-400 font-bold mb-2">Le Pouvoir</h3>
+                                        <p class="text-gray-300 text-lg">Flash fait vibrer ses molécules pour passer à travers la matière solide.</p>
+                                    </div>
+                                    <div class="relative pl-6 border-l-4 border-blue-500 bg-blue-900/10 p-4 rounded-r-lg">
+                                        <h3 class="text-2xl text-blue-400 font-bold mb-2">La Réalité : Physique Quantique</h3>
+                                        <p class="text-gray-300 mb-4">C'est l'<strong>Effet Tunnel</strong>. Une particule n'a pas une position fixe, mais une "probabilité" de présence.</p>
+                                        <ul class="list-disc pl-5 space-y-2 text-sm text-gray-400">
+                                            <li>Une particule peut "emprunter" de l'énergie pour franchir une barrière impossible.</li>
+                                            <li>Ce phénomène est utilisé dans les microscopes électroniques et les mémoires Flash.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Introduction -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="text-center max-w-5xl mx-auto flex flex-col items-center justify-center h-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-bold tracking-widest mb-3">
+                            DOSSIER #04
+                        </div>
+                        <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter text-white text-center leading-tight">
+                            DE <span class="text-red-500 red-glow">DEADPOOL</span><br>
+                            À L'<span class="text-cyan-400 cyan-glow">AXOLOTL</span>
+                        </h1>
+                        <p class="text-2xl md:text-3xl font-light text-gray-300 mt-4">
+                            Le Secret de la Régénération Parfaite
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Deadpool Fiction -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10">
+                        <div class="relative group order-2 md:order-1">
+                            <img src="images/Deadpool.png" alt="Deadpool" class="rounded-2xl shadow-2xl shadow-red-900/50 border-4 border-red-500/30 w-full max-h-[70vh] object-cover transition transform group-hover:scale-[1.02]">
+                            <div class="absolute inset-0 border-4 border-red-500/0 group-hover:border-red-500/50 rounded-2xl transition duration-500"></div>
+                        </div>
+                        <div class="order-1 md:order-2 space-y-8">
+                            <h2 class="text-5xl font-bold text-red-500 red-glow mb-4">La Fiction : <br><span class="text-white">Wade Wilson</span></h2>
+                            <ul class="space-y-6 text-xl">
+                                <li class="flex items-start space-x-4 p-4 bg-red-900/10 rounded-xl border-l-4 border-red-500">
+                                    <span class="material-symbols-outlined text-red-500 mt-1">healing</span>
+                                    <div>
+                                        <strong class="block text-red-400 text-2xl mb-1">Guérison Instantanée</strong>
+                                        <span class="text-gray-300">De la blessure superficielle à la décapitation.</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-4 p-4 bg-red-900/10 rounded-xl border-l-4 border-red-500">
+                                    <span class="material-symbols-outlined text-red-500 mt-1">movie</span>
+                                    <div>
+                                        <strong class="block text-red-400 text-2xl mb-1">Imaginaire</strong>
+                                        <span class="text-gray-300">Vitesse cellulaire impossible physiquement.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Axolotl Reality -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10">
+                        <div class="space-y-8 z-10">
+                            <h2 class="text-5xl font-bold text-cyan-400 cyan-glow mb-4">La Réalité : <br><span class="text-white">L'Axolotl</span></h2>
+                            <div class="bg-cyan-950/30 p-6 rounded-2xl border border-cyan-500/20 backdrop-blur-sm">
+                                <h3 class="text-cyan-300 font-bold mb-2 text-xl">Ambystoma mexicanum</h3>
+                                <p class="text-gray-300 italic">Salamandre aquatique originaire des lacs de Mexico.</p>
+                            </div>
+                            <ul class="space-y-6 text-xl">
+                                <li class="flex items-center space-x-4">
+                                    <span class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">1</span>
+                                    <span class="text-gray-200"><strong class="text-cyan-400">Néoténie :</strong> Reste à l'état larvaire toute sa vie.</span>
+                                </li>
+                                <li class="flex items-center space-x-4">
+                                    <span class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold">2</span>
+                                    <span class="text-gray-200"><strong class="text-cyan-400">Régénération Totale :</strong> Organes, cerveau, membres.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="relative">
+                            <img src="images/Axolotl.png" alt="Axolotl" class="rounded-2xl shadow-2xl shadow-cyan-900/50 border-2 border-cyan-500/30 w-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Humans vs Fibrosis -->
+                <div class="slide" data-hero="deadpool">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center">Pourquoi cicatrisons-nous mal ?</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full z-10">
+                        <div class="bg-red-950/20 p-8 rounded-3xl border border-red-900/30 hover:bg-red-950/30 transition duration-500">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <span class="material-symbols-outlined text-red-500 text-5xl">warning</span>
+                                <h3 class="text-3xl font-bold text-red-400">L'Humain : Fibrose</h3>
+                            </div>
+                            <img src="images/Fibrose.png" alt="Fibrose" class="w-full rounded-lg mb-6 opacity-80 object-contain max-h-[320px] mx-auto">
+                            <ul class="space-y-4 text-lg text-gray-300">
+                                <li class="flex items-start"><span class="text-red-500 mr-2">✖</span> Cicatrisation d'urgence (Collage).</li>
+                                <li class="flex items-start"><span class="text-red-500 mr-2">✖</span> Tissu rigide, non fonctionnel.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-cyan-950/20 p-8 rounded-3xl border border-cyan-900/30 hover:bg-cyan-950/30 transition duration-500">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <span class="material-symbols-outlined text-cyan-400 text-5xl">auto_fix_high</span>
+                                <h3 class="text-3xl font-bold text-cyan-400">L'Axolotl : Perfection</h3>
+                            </div>
+                            <img src="images/Tissu sain.png" alt="Tissu sain" class="w-full rounded-lg mb-6 opacity-80 object-contain max-h-[320px] mx-auto">
+                            <ul class="space-y-4 text-lg text-gray-300">
+                                <li class="flex items-start"><span class="text-cyan-400 mr-2">✔</span> Aucune cicatrice.</li>
+                                <li class="flex items-start"><span class="text-cyan-400 mr-2">✔</span> Restauration fonctionnelle.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Epimorphosis -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="max-w-6xl w-full flex flex-col md:flex-row gap-8 items-center justify-between">
+                        <div class="w-full md:w-1/2 text-left space-y-6">
+                            <h2 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-2">Le Secret : L'Épimorphose</h2>
+                            <div class="space-y-4">
+                                <div class="p-4 rounded-xl border-l-4 border-purple-500 bg-purple-900/20 backdrop-blur-md">
+                                    <h3 class="text-xl font-bold text-purple-300">1. Dé-différenciation</h3>
+                                    <p class="text-sm text-gray-300">Retour à l'état de cellule souche.</p>
+                                </div>
+                                <div class="p-4 rounded-xl border-l-4 border-yellow-500 bg-yellow-900/20 backdrop-blur-md">
+                                    <h3 class="text-xl font-bold text-yellow-300">2. Blastème</h3>
+                                    <p class="text-sm text-gray-300">Centre de reconstruction actif.</p>
+                                </div>
+                                <div class="p-4 rounded-xl border-l-4 border-blue-500 bg-blue-900/20 backdrop-blur-md">
+                                    <h3 class="text-xl font-bold text-blue-300">3. Repousse</h3>
+                                    <p class="text-sm text-gray-300">Reconstruction anatomique parfaite.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 flex flex-col items-center">
+                            <div class="bg-black/40 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl" style="min-width: 360px;">
+                                <div class="text-xs text-gray-400 mb-4 uppercase tracking-widest text-center">Boucle de Régénération</div>
+                                <div class="regen-stage" style="margin: 0 auto;">
+                                    <div class="cut-line"></div>
+                                    <div class="stump"></div>
+                                    <div class="new-limb">
+                                        <div class="blastema-glow"></div>
+                                        <div class="fingers-container">
+                                            <div class="finger-digit"></div>
+                                            <div class="finger-digit"></div>
+                                            <div class="finger-digit"></div>
+                                            <div class="finger-digit"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-purple-300 mt-4 text-center animate-pulse">Observation en temps réel...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Medical Hope -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between gap-12 z-20">
+                        <div class="w-full md:w-1/2 space-y-10 text-center md:text-left">
+                            <h2 class="text-5xl font-bold text-white mb-6">L'Espoir Médical</h2>
+                            <div class="grid grid-cols-1 gap-6 text-left">
+                                <div class="bg-gray-800 p-6 rounded-lg border-l-4 border-green-500 shadow-lg transform hover:scale-105 transition duration-300">
+                                    <h4 class="text-green-400 font-bold text-xl mb-2">Objectifs</h4>
+                                    <p class="text-gray-300">Comprendre le mécanisme pour réparer la moelle épinière et les organes humains.</p>
+                                </div>
+                            </div>
+                            <p class="text-2xl text-cyan-200 font-light italic mt-8">
+                                "Transformer la science-fiction en réalité médicale."
+                            </p>
+                        </div>
+                        <div class="w-full md:w-1/2 flex justify-center">
+                            <img src="images/Axolotl_Cartoon.png" alt="Axolotl Cartoon" class="w-64 md:w-80 filter drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEADPOOL/AXOLOTL SECTION - Conclusion -->
+                <div class="slide" data-hero="deadpool">
+                    <div class="flex flex-col items-center justify-center space-y-8 max-w-4xl w-full h-full mx-auto">
+                        <h2 class="text-6xl font-black text-white mb-4 text-center">Deadpool vs Axolotl</h2>
+                        <div class="glass-panel p-8 rounded-2xl max-w-2xl text-center">
+                            <p class="text-xl text-slate-200 leading-relaxed">
+                                Si Deadpool existait, son pouvoir ne viendrait pas de la magie, mais d'une version extrême de ce que fait l'axolotl : <strong>l'épimorphose</strong>. La science cherche toujours comment l'appliquer à l'humain.
+                            </p>
+                        </div>
+                        <button class="mt-4 flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs" onclick="goToSlide(0)">
+                            <span class="material-symbols-outlined text-sm">replay</span> Retour au menu
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer class="footer-bar glass-panel border-t border-white/10 flex items-center justify-between px-6 z-50">
+            <button id="btn-prev"
+                class="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-all disabled:opacity-30"
+                onclick="prevSlide()">
+                <span class="material-symbols-outlined text-xl">arrow_back</span>
+            </button>
+            <div id="progress-bar-container" class="w-1/3 h-1 bg-slate-800 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-white transition-all duration-300" style="width: 0%;"></div>
+            </div>
+            <button id="btn-next"
+                class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all disabled:opacity-30"
+                onclick="nextSlide()">
+                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        // --- VARIABLES ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const track = document.getElementById('slider-track');
+        const bgGradient = document.getElementById('bg-gradient');
+
+        // Configuration des thèmes par slide/hero
+        // 0: Hub
+        // 1-7: Aquaman (7 slides)
+        // 8-12: Spiderman (5 slides)
+        // 13-17: Flash (5 slides)
+        // 18-24: Deadpool (7 slides)
+        const heroConfigs = {
+            'aquaman': { start: 1, end: 6, color: 'from-cyan-900', label: 'AQUAMAN' },
+            'spiderman': { start: 7, end: 12, color: 'from-red-900', label: 'SPIDER-MAN' },
+            'flash': { start: 13, end: 17, color: 'from-yellow-900', label: 'THE FLASH' },
+            'deadpool': { start: 18, end: 24, color: 'from-pink-900', label: 'DEADPOOL' },
+            'hub': { start: 0, end: 0, color: 'from-slate-800', label: 'SELECTION' }
+        };
+
+        // --- INIT ---
+        function init() {
+            createParticles();
+            initPressureSlider();
+            updateUI();
+            updatePressureData(0);
+            setAdhesionMode('fiction');
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            });
+        }
+
+        // --- NAVIGATION ---
+        function updateUI() {
+            // Déplacement
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Boutons
+            document.getElementById('btn-prev').disabled = currentSlide === 0;
+            document.getElementById('btn-next').disabled = currentSlide === totalSlides - 1;
+
+            // Progress Bar & Labels
+            const progress = (currentSlide / (totalSlides - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('slide-counter').innerText = currentSlide.toString().padStart(2, '0');
+
+            // Mise à jour du thème en fonction du héros actif
+            updateTheme();
+        }
+
+        function updateTheme() {
+            const currentHero = Object.keys(heroConfigs).find(key =>
+                currentSlide >= heroConfigs[key].start && currentSlide <= heroConfigs[key].end
+            ) || 'hub';
+
+            // Change Background Gradient
+            bgGradient.className = `absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${heroConfigs[currentHero].color} via-slate-950 to-black transition-all duration-1000`;
+
+            // Change Label
+            document.getElementById('current-hero-label').innerText = heroConfigs[currentHero].label;
+
+            // Reset animations if needed
+            if (currentSlide === 6) { // Spider-Man graph slide
+                resetWebBars();
+            }
+        }
+
+        function startHero(hero) {
+            currentSlide = heroConfigs[hero].start;
+            updateUI();
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateUI(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateUI(); } }
+        function goToSlide(idx) { currentSlide = idx; updateUI(); }
+
+        // --- FEATURE: AQUAMAN LOGIC ---
+        function setBreathing(type) {
+            const overlay = document.getElementById('liquid-overlay');
+            const title = document.getElementById('breath-status-title');
+            const desc = document.getElementById('breath-status-desc');
+            const btnAir = document.getElementById('btn-air');
+            const btnLiq = document.getElementById('btn-liquid');
+
+            if (type === 'liquid') {
+                overlay.style.height = '100%';
+                title.innerText = "Ventilation Liquide (PFC)";
+                title.className = "text-sm font-bold text-cyan-400 mb-0.5 transition-colors";
+                desc.innerText = "On remplit les poumons d'un liquide riche en oxygène (PFC). Incompressible, il résiste à la pression.";
+                btnLiq.className = "px-4 py-1 rounded text-xs font-bold bg-cyan-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.5)] transition-all";
+                btnAir.className = "px-4 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition-all";
+            } else {
+                overlay.style.height = '0%';
+                title.innerText = "Mode Air (Classique)";
+                title.className = "text-sm font-bold text-amber-500 mb-0.5 transition-colors";
+                desc.innerText = "Nos poumons sont des sacs d'air. Sous l'eau, ils seraient réduits à la taille d'une balle de ping-pong.";
+                btnAir.className = "px-4 py-1 rounded text-xs font-bold bg-amber-500 text-black shadow transition-all";
+                btnLiq.className = "px-4 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition-all";
+            }
+        }
+
+        function initPressureSlider() {
+            const slider = document.getElementById('slider-track-area');
+            const thumb = document.getElementById('slider-thumb');
+            const depthImg = document.getElementById('depth-img');
+            let isDragging = false;
+
+            function updateSlider(clientY) {
+                const rect = slider.getBoundingClientRect();
+                let y = clientY - rect.top;
+                if (y < 0) y = 0;
+                if (y > rect.height) y = rect.height;
+
+                const pct = y / rect.height;
+                const depth = Math.round(pct * 11000);
+
+                thumb.style.top = (pct * 100) + '%';
+                updatePressureData(depth);
+            }
+
+            slider.addEventListener('mousedown', (e) => { isDragging = true; updateSlider(e.clientY); });
+            window.addEventListener('mousemove', (e) => { if (isDragging) { e.preventDefault(); updateSlider(e.clientY); } });
+            window.addEventListener('mouseup', () => { isDragging = false; });
+            
+            slider.addEventListener('touchstart', (e) => { isDragging = true; updateSlider(e.touches[0].clientY); }, {passive:false});
+            window.addEventListener('touchmove', (e) => { if (isDragging) { e.preventDefault(); updateSlider(e.touches[0].clientY); }}, {passive:false});
+            window.addEventListener('touchend', () => { isDragging = false; });
+        }
+
+        function updatePressureData(depth) {
+            const atm = Math.round(depth/10 + 1);
+            document.getElementById('depth-val').innerText = `-${depth}m`;
+            document.getElementById('atm-val').innerText = `${atm} ATM`;
+
+            const elephantBox = document.getElementById('elephant-box');
+            const elephantText = document.getElementById('elephant-text');
+            const elephantIcons = document.getElementById('elephant-icons');
+            const depthTitle = document.getElementById('depth-title');
+            const depthDesc = document.getElementById('depth-desc');
+            const depthImg = document.getElementById('depth-img');
+            
+              if(depth < 200) {
+                elephantText.innerText = "Négligeable";
+                elephantIcons.innerHTML = '<span class="material-symbols-outlined text-2xl">sentiment_satisfied</span>';
+                elephantBox.className = "bg-slate-800/50 rounded-lg p-3 w-full mb-4 border border-white/5 text-center transition-all";
+                depthTitle.innerText = "La Surface";
+                depthDesc.innerText = "Ici, tout va bien. Mais l'eau est lourde.";
+                 if (depthImg) { depthImg.src = "images/Surface.png"; depthImg.alt = "Surface"; }
+            } else if (depth < 4000) {
+                 elephantText.innerText = "Écrasant (Titanic)";
+                 elephantIcons.innerHTML = '<span class="text-xl">🐘</span>';
+                 elephantBox.className = "bg-blue-900/40 rounded-lg p-3 w-full mb-4 border border-blue-500/30 text-center transition-all";
+                 depthTitle.innerText = "Zone Profonde";
+                 depthDesc.innerText = "La pression est déjà colossale.";
+                  if (depthImg) { depthImg.src = "images/Zone Profonde.png"; depthImg.alt = "Zone Profonde"; }
+            } else {
+                 elephantText.innerText = "1 Éléphant sur le pouce";
+                 elephantIcons.innerHTML = '<span class="text-2xl">🐘</span><span class="text-sm">👍</span>';
+                 elephantBox.className = "bg-red-900/40 rounded-lg p-3 w-full mb-4 border border-red-500/30 text-center transition-all animate-pulse";
+                 depthTitle.innerText = "Fosse des Mariannes";
+                 depthDesc.innerText = "1000 ATM. Imaginez un éléphant sur votre pouce.";
+                  if (depthImg) { depthImg.src = "images/Fosse des Mariannes.png"; depthImg.alt = "Fosse des Mariannes"; }
+            }
+        }
+
+        function triggerSpeed() {
+            const bars = document.querySelectorAll('.speed-bar-fill');
+            bars.forEach(b => { b.style.transition = 'none'; b.style.width = '0%'; });
+            void document.body.offsetWidth; 
+            
+            setTimeout(() => {
+                bars.forEach(b => b.style.transition = 'width 1.5s cubic-bezier(0.22, 1, 0.36, 1)');
+                bars[0].style.width = '1%';
+                bars[1].style.width = '15%';
+                bars[2].style.width = '30%';
+                bars[3].style.width = '95%';
+            }, 50);
+        }
+
+        // --- FEATURE: SPIDER-MAN LOGIC ---
+        function triggerWebTest() {
+            const bars = document.querySelectorAll('.web-bar-fill');
+            bars.forEach(b => { b.style.transition = 'none'; b.style.width = '0%'; });
+            void document.body.offsetWidth;
+
+            setTimeout(() => {
+                bars.forEach(b => b.style.transition = 'width 1.5s cubic-bezier(0.22, 1, 0.36, 1)');
+                bars[0].style.width = '20%';
+                bars[1].style.width = '50%';
+                bars[2].style.width = '95%';
+            }, 50);
+        }
+
+        function resetWebBars() {
+            const bars = document.querySelectorAll('.web-bar-fill');
+            bars.forEach(b => b.style.width = '0%');
+        }
+
+        function setAdhesionMode(mode) {
+            const imgFiction = document.getElementById('img-fiction');
+            const imgReality = document.getElementById('img-reality');
+            const btnFiction = document.getElementById('btn-fiction');
+            const btnReality = document.getElementById('btn-reality');
+            const title = document.getElementById('adh-title');
+            const desc = document.getElementById('adh-desc');
+
+            if (!imgFiction || !imgReality) return;
+
+            if (mode === 'fiction') {
+                imgFiction.classList.replace('opacity-0', 'opacity-100');
+                imgReality.classList.replace('opacity-100', 'opacity-0');
+                btnFiction.className = "flex-1 py-3 rounded-lg bg-red-600 text-white font-bold transition-all shadow-lg";
+                btnReality.className = "flex-1 py-3 rounded-lg bg-slate-800 text-slate-400 font-bold hover:bg-slate-700 transition-all";
+                title.innerText = "Micro-scopules rétractables";
+                title.className = "text-2xl font-bold text-red-500 mb-1";
+                desc.innerText = "Mutation fictive : des poils microscopiques barbelés pour coller partout.";
+            } else {
+                imgFiction.classList.replace('opacity-100', 'opacity-0');
+                imgReality.classList.replace('opacity-0', 'opacity-100');
+                btnReality.className = "flex-1 py-3 rounded-lg bg-blue-600 text-white font-bold transition-all shadow-lg";
+                btnFiction.className = "flex-1 py-3 rounded-lg bg-slate-800 text-slate-400 font-bold hover:bg-slate-700 transition-all";
+                title.innerText = "Setae & Forces de Van der Waals";
+                title.className = "text-2xl font-bold text-blue-400 mb-1";
+                desc.innerText = "Version réaliste : millions de setae qui exploitent les forces atomiques, comme un gecko.";
+            }
+        }
+
+        function updateSimulation(val) {
+            const steel = Math.min(val, 450);
+            const kevlar = Math.min(val, 1000);
+            const silk = Math.min(val, 1800);
+
+            const steelBar = document.getElementById('bar-steel');
+            const kevlarBar = document.getElementById('bar-kevlar');
+            const silkBar = document.getElementById('bar-silk');
+
+            document.getElementById('steel-val').innerText = `${Math.floor(steel)} MPa`;
+            document.getElementById('kevlar-val').innerText = `${Math.floor(kevlar)} MPa`;
+            document.getElementById('silk-val').innerText = `${Math.floor(silk)} MPa`;
+
+            steelBar.style.width = `${steel / 20}%`;
+            kevlarBar.style.width = `${kevlar / 20}%`;
+            silkBar.style.width = `${silk / 20}%`;
+
+            if (val > 450) {
+                document.getElementById('break-steel').classList.remove('hidden');
+                steelBar.classList.add('opacity-50', 'bg-red-800');
+            } else {
+                document.getElementById('break-steel').classList.add('hidden');
+                steelBar.classList.remove('opacity-50', 'bg-red-800');
+            }
+        }
+
+        let quizScore = 0;
+        function checkAnswer(btn, isCorrect) {
+            const siblings = btn.parentElement.querySelectorAll('button');
+            siblings.forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('bg-green-600', 'text-white');
+                btn.classList.remove('bg-slate-700');
+                quizScore++;
+            } else {
+                btn.classList.add('bg-red-600', 'text-white');
+                btn.classList.remove('bg-slate-700');
+            }
+            if (quizScore >= 1) {
+                const res = document.getElementById('quiz-result');
+                if (res) res.classList.remove('hidden');
+            }
+        }
+
+        // --- FEATURE: FLASH LOGIC ---
+        window.setSpeed = function(kmh, title, speedText, desc, imageUrl) {
+            const bar = document.getElementById('speed-bar');
+            const info = document.getElementById('speed-info');
+            const valDisplay = document.getElementById('speed-value-display');
+            
+            // 1225 km/h is 100%
+            let width = (kmh / 1225) * 100;
+            if(width < 1) width = 1;
+
+            if (bar) bar.style.width = width + '%';
+            if (valDisplay) valDisplay.innerText = speedText;
+            
+            if (info) {
+                info.innerHTML = `
+                    <div class="flex items-center gap-6 animate-[fadeIn_0.3s_ease-out]">
+                        <div class="flex-1">
+                            <h4 class="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+                                ${title} 
+                                <span class="text-sm bg-yellow-500 text-black px-2 py-0.5 rounded font-mono font-bold">${speedText}</span>
+                            </h4>
+                            <p class="text-lg text-gray-300 leading-snug">${desc}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        };
+
+        // --- VISUEL: PARTICULES ---
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 4 + 2 + 'px';
+                p.style.width = size; p.style.height = size;
+                p.style.backgroundColor = 'rgba(255,255,255,' + (Math.random() * 0.1) + ')';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.setProperty('--duration', (Math.random() * 10 + 10) + 's');
+                p.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+                p.style.setProperty('--max-opacity', Math.random() * 0.5 + 0.1);
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // Start
+        init();
+
+        // --- EVENT LISTENERS POUR LES CARTES DE VITESSE ---
+        document.querySelectorAll('.speed-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const speed = parseFloat(this.getAttribute('data-speed'));
+                const name = this.getAttribute('data-name');
+                const label = this.getAttribute('data-label');
+                const desc = this.getAttribute('data-desc');
+                const img = this.getAttribute('data-img');
+                setSpeed(speed, name, label, desc, img);
+            });
+        });
+
+    </script>
 </body>
+
 </html>
